@@ -89,19 +89,17 @@ npm run dev
 El proyecto incluye `Dockerfile` multi-etapa endurecido (usuario sin privilegios `node`, `HEALTHCHECK` integrado) y `render.yaml` listo para despliegue gratuito:
 
 ### Opción A — Render.com (Recomendada, gratuita con `render.yaml`)
-1. Sube esta carpeta `reto-03` a un repositorio en tu cuenta de GitHub:
+1. El repositorio público ya está publicado en GitHub:  
+   **https://github.com/spinedab/periferia-reto-03-oc-sap**
    ```bash
-   git init
-   git add .
-   git commit -m "feat: entrega completa Reto 03 Agente OC SAP"
    git branch -M main
-   git remote add origin https://github.com/<tu-usuario>/periferia-reto-03-oc-sap.git
+   git remote add origin https://github.com/spinedab/periferia-reto-03-oc-sap.git
    git push -u origin main
    ```
-2. Entra a [https://dashboard.render.com](https://dashboard.render.com) → **New +** → **Blueprint** (o **Web Service** con runtime **Docker**).
-3. Conecta el repositorio recién subido. Render detectará automáticamente `render.yaml` y `Dockerfile`.
-4. En **Environment Variables**, pega el valor de `GEMINI_API_KEY`.
-5. Haz clic en **Apply / Deploy**. En ~2 minutos obtendrás tu URL pública tipo:
+2. Haz clic directo en el Blueprint de despliegue (o entra a [https://dashboard.render.com](https://dashboard.render.com) → **New +** → **Blueprint**):  
+   **https://render.com/deploy?repo=https://github.com/spinedab/periferia-reto-03-oc-sap**
+3. En **Environment Variables**, pega el valor de `GEMINI_API_KEY` (además `LLM_FALLBACK_DETERMINISTIC=true` ya queda activo como respaldo continuo).
+4. Haz clic en **Apply / Deploy**. En ~2 minutos quedará activa la URL pública:
    `https://periferia-reto03-agente-oc-sap.onrender.com`
 
 ### Opción B — Railway.app (1 comando o GitHub)
@@ -120,7 +118,9 @@ Esto entrega de inmediato una URL pública `https://*.trycloudflare.com` conecta
 
 ---
 
-## 7.Enlace Público de Demostración
+## 7. Enlace Público de Demostración y Repositorio
 
-- **URL en vivo:** *(Pegar aquí la URL generada en Render / Railway antes de enviar el correo)*
+- **Repositorio GitHub:** https://github.com/spinedab/periferia-reto-03-oc-sap
+- **URL en vivo (Render):** https://periferia-reto03-agente-oc-sap.onrender.com
+- **Evidencias de pruebas:** [`docs/EVIDENCIAS_PRUEBAS_RETO03.pdf`](docs/EVIDENCIAS_PRUEBAS_RETO03.pdf)
 - **Autenticación:** Pública para evaluación técnica (sin credenciales requeridas).

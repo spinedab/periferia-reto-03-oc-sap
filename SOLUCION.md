@@ -243,7 +243,9 @@ No recomiendo bloquear de golpe el 100 % el primer día (paralizaría pagos a pr
 
 ## 11. Declaración de Uso de Asistentes de IA
 
-- **Asistente utilizado:** Google Antigravity (Gemini) como par de programación para aceleración de scaffolding TypeScript, generación de pruebas unitarias en `Vitest`, maquetación CSS de la interfaz de chat y estructuración documental.
+- **Asistentes utilizados:**
+  1. **Google Antigravity (Gemini):** empleado como par de programación para aceleración de scaffolding en TypeScript estricto, implementación de herramientas con `zod`, pruebas unitarias en `Vitest`, maquetación CSS de la interfaz de chat y estructuración arquitectónica.
+  2. **Claude Code (Anthropic):** empleado para auditoría independiente de calidad contra la rúbrica del PRD, generación del informe consolidado de evidencias (`docs/EVIDENCIAS_PRUEBAS_RETO03.pdf` con salidas de tests, ejecución determinista y capturas de interfaz) y revisión de empaquetado final.
 - **Decisiones revisadas y descartadas respecto a sugerencias iniciales:**
   1. **Descarte de `xlsx` (SheetJS):** inicialmente se instaló `xlsx@0.18.5` para cubrir la herramienta P1 `oc_leer_excel`; al auditar con `npm audit`, detecté vulnerabilidades sin parche en npm y lo reemplacé por un lector propio sobre `node:zlib` (`src/utils/xlsx-reader.ts`).
   2. **Descarte de validación delegada al LLM:** rechacé cualquier enfoque donde el LLM comparara fechas o calculara el 2 % de desviación en el prompt; toda regla `RC1`–`RC10` quedó codificada en funciones puras deterministas y verificadas sin LLM en `demo.ts`.

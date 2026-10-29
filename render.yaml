@@ -13,6 +13,8 @@ services:
         value: gemini-2.5-flash
       - key: GEMINI_API_KEY
         sync: false
+      - key: LLM_FALLBACK_DETERMINISTIC
+        value: "true"
       - key: AGENT_MAX_ITERATIONS
         value: "25"
       - key: SESSION_MAX_TOKENS
