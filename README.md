@@ -100,7 +100,7 @@ El proyecto incluye `Dockerfile` multi-etapa endurecido (usuario sin privilegios
    **https://render.com/deploy?repo=https://github.com/spinedab/periferia-reto-03-oc-sap**
 3. En **Environment Variables**, pega el valor de `GEMINI_API_KEY` (además `LLM_FALLBACK_DETERMINISTIC=true` ya queda activo como respaldo continuo).
 4. Haz clic en **Apply / Deploy**. En ~2 minutos quedará activa la URL pública:
-   `https://periferia-reto03-agente-oc-sap.onrender.com`
+   `https://<nombre-del-servicio>.onrender.com` *(ejemplo; la URL real la asigna Render al desplegar)*.
 
 ### Opción B — Railway.app (1 comando o GitHub)
 1. En [https://railway.app](https://railway.app), selecciona **New Project → Deploy from GitHub repo**.
@@ -121,6 +121,7 @@ Esto entrega de inmediato una URL pública `https://*.trycloudflare.com` conecta
 ## 7. Enlace Público de Demostración y Repositorio
 
 - **URL en vivo 24/7 (GitHub Pages):** https://spinedab.github.io/periferia-reto-03-oc-sap/
+  > **Nota:** la URL de GitHub Pages ejecuta en el navegador el mismo motor de herramientas y controles `RC1`–`RC10` (`web/standalone-engine.js`, modo determinista, sin LLM ni backend) para garantizar disponibilidad 24/7 sin costo. El ciclo completo con modelo de lenguaje (backend + adaptador LLM + Gemini) se prueba con `npm run dev` o desplegando el `Dockerfile` en Render/Railway; la misma interfaz se conecta a ese backend añadiendo `?api=https://<url-del-backend>` a la URL de Pages. Durante la defensa técnica se mostrará el modo LLM en vivo.
 - **Repositorio GitHub:** https://github.com/spinedab/periferia-reto-03-oc-sap
 - **Descarga directa paquete `.zip` (GitHub Release):** https://github.com/spinedab/periferia-reto-03-oc-sap/releases/latest
 - **Despliegue contenedor Docker en 1 clic (Render Blueprint):** https://render.com/deploy?repo=https://github.com/spinedab/periferia-reto-03-oc-sap
