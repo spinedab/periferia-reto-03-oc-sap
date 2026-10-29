@@ -48,6 +48,9 @@ function enviarJson(res: http.ServerResponse, status: number, payload: unknown):
     "Content-Type": "application/json; charset=utf-8",
     "X-Content-Type-Options": "nosniff",
     "Cache-Control": "no-store",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
   });
   res.end(body);
 }
@@ -196,6 +199,16 @@ export function crearServidorHttp(): http.Server {
       const url = new URL(req.url ?? "/", `http://${host}`);
       const pathname = decodeURIComponent(url.pathname);
       const method = req.method ?? "GET";
+
+      if (method === "OPTIONS") {
+        res.writeHead(204, {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
+        });
+        res.end();
+        return;
+      }
 
       // 1. Endpoint obligatorio GET /api/health (sin exponer claves)
       if (method === "GET" && pathname === "/api/health") {

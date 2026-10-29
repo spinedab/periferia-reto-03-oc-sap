@@ -1,4 +1,14 @@
+import {
+  standaloneAudit,
+  standaloneCases,
+  standaloneChat,
+  standaloneGetSession,
+} from "./standalone-engine.js";
+
 const STORAGE_KEY = "periferia_reto03_session_id";
+let useStandaloneMode = false;
+const apiParam = new URLSearchParams(window.location.search).get("api") || "";
+const API_BASE = apiParam.replace(/\/+$/, "");
 
 function generarSessionId() {
   const rand = Math.random().toString(36).slice(2, 9);
@@ -131,22 +141,31 @@ function formatInline(str) {
 
 async function cargarHealth() {
   try {
-    const res = await fetch("/api/health");
+    const res = await fetch(`${API_BASE}/api/health`);
+    const ct = res.headers.get("content-type") || "";
+    if (!res.ok || !ct.includes("application/json")) {
+      throw new Error("Static host detected");
+    }
     const data = await res.json();
+    useStandaloneMode = false;
     els.healthDot.className = `status-dot ${data.configured ? "online" : "offline"}`;
     els.providerLabel.textContent = `LLM: ${String(data.provider).toUpperCase()}`;
     els.modelLabel.textContent = `Modelo: ${data.model}${data.configured ? "" : " (sin API key)"}`;
     els.policyLabel.textContent = `Política HITL: ${String(data.confirmPolicy || "prd").toUpperCase()}`;
   } catch {
-    els.healthDot.className = "status-dot offline";
-    els.providerLabel.textContent = "Backend desconectado";
+    useStandaloneMode = true;
+    els.healthDot.className = "status-dot online";
+    els.providerLabel.textContent = "MOTOR: DETERMINISTA ACTIVO";
+    els.modelLabel.textContent = "Reglas RC1–RC10 + SAP Simulado 24/7";
+    els.policyLabel.textContent = "Política HITL: PRD";
   }
 }
 
 async function cargarCasos() {
   try {
-    const res = await fetch("/api/cases");
-    const data = await res.json();
+    const data = useStandaloneMode
+      ? await standaloneCases()
+      : await (await fetch(`${API_BASE}/api/cases`)).json();
     els.casesList.innerHTML = "";
     for (const c of data.cases || []) {
       const card = document.createElement("div");
@@ -299,8 +318,9 @@ function renderizarTurno(turn, esUltimoTurnoActivo) {
 async function restaurarHistorialSesion() {
   els.sessionLabel.textContent = `Sesión: ${currentSessionId}`;
   try {
-    const res = await fetch(`/api/sessions/${encodeURIComponent(currentSessionId)}`);
-    const data = await res.json();
+    const data = useStandaloneMode
+      ? await standaloneGetSession(currentSessionId)
+      : await (await fetch(`${API_BASE}/api/sessions/${encodeURIComponent(currentSessionId)}`)).json();
     els.tokenCounter.textContent = `Tokens sesión: ${Number(data.totalTokensUsed || 0).toLocaleString("es-CO")}`;
     const turns = data.turns || [];
     turns.forEach((t, idx) => {
@@ -325,16 +345,23 @@ async function enviarMensaje(texto) {
   });
 
   try {
-    const res = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        sessionId: currentSessionId,
-        message: limpio,
-      }),
-    });
-    const data = await res.json();
-    if (!res.ok && data.error) {
+    let resOk = true;
+    let data;
+    if (useStandaloneMode) {
+      data = await standaloneChat(currentSessionId, limpio);
+    } else {
+      const res = await fetch(`${API_BASE}/api/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sessionId: currentSessionId,
+          message: limpio,
+        }),
+      });
+      resOk = res.ok;
+      data = await res.json();
+    }
+    if (!resOk && data.error) {
       renderizarTurno(
         {
           userMessage: limpio,
@@ -414,8 +441,9 @@ els.btnAuditModal.addEventListener("click", async () => {
   els.auditModal.classList.remove("hidden");
   els.auditContent.innerHTML = "Cargando registros de auditoría...";
   try {
-    const res = await fetch("/api/audit");
-    const data = await res.json();
+    const data = useStandaloneMode
+      ? await standaloneAudit()
+      : await (await fetch(`${API_BASE}/api/audit`)).json();
     const rows = data.control || [];
     const ordenes = data.ordenes || [];
 
@@ -479,7 +507,9 @@ els.auditModal.addEventListener("click", (e) => {
   }
 });
 
-// Inicialización
-cargarHealth();
-cargarCasos();
-restaurarHistorialSesion();
+// Inicialización secuencial (detecta backend en vivo o motor 24/7 antes de cargar casos)
+(async function init() {
+  await cargarHealth();
+  await cargarCasos();
+  await restaurarHistorialSesion();
+})();
