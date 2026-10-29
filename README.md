@@ -120,7 +120,9 @@ Esto entrega de inmediato una URL pública `https://*.trycloudflare.com` conecta
 
 ## 7. Enlace Público de Demostración y Repositorio
 
+- **URL en vivo 24/7 (GitHub Pages):** https://spinedab.github.io/periferia-reto-03-oc-sap/
 - **Repositorio GitHub:** https://github.com/spinedab/periferia-reto-03-oc-sap
-- **URL en vivo (Render):** https://periferia-reto03-agente-oc-sap.onrender.com
+- **Descarga directa paquete `.zip` (GitHub Release):** https://github.com/spinedab/periferia-reto-03-oc-sap/releases/latest
+- **Despliegue contenedor Docker en 1 clic (Render Blueprint):** https://render.com/deploy?repo=https://github.com/spinedab/periferia-reto-03-oc-sap
 - **Evidencias de pruebas:** [`docs/EVIDENCIAS_PRUEBAS_RETO03.pdf`](docs/EVIDENCIAS_PRUEBAS_RETO03.pdf)
 - **Autenticación:** Pública para evaluación técnica (sin credenciales requeridas).
