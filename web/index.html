@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Periferia IT · Agente Órdenes de Compra SAP (Perxia 2.0)</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Panel Lateral: Casos, Estado SAP y Auditoría -->
+    <aside class="sidebar">
+      <div class="brand-header">
+        <div class="brand-badge">PERXIA 2.0 · SAP MM</div>
+        <h1>Agente Órdenes de Compra</h1>
+        <p class="subtitle">Periferia IT Group · Sociedad 1000</p>
+      </div>
+
+      <div class="status-card" id="healthCard">
+        <div class="status-row">
+          <span class="status-dot" id="healthDot"></span>
+          <strong id="providerLabel">Conectando...</strong>
+        </div>
+        <div class="status-meta" id="modelLabel">Verificando motor...</div>
+        <div class="status-meta" id="tokenCounter">Tokens sesión: 0</div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="section-header">
+          <h2>Casos de Prueba (Fixtures)</h2>
+          <button id="btnRefreshCases" class="icon-btn" title="Actualizar estado SAP">↻</button>
+        </div>
+        <p class="section-hint">Haz clic en un caso para enviarlo al agente o probar el prompt de defensa.</p>
+        <div id="casesList" class="cases-list"></div>
+      </div>
+
+      <div class="sidebar-section">
+        <h2>Prompts Rápidos Defensa</h2>
+        <button class="preset-btn" id="btnPromptPrd11">
+          🎯 Demo PRD §11 (sol-004 con vista previa)
+        </button>
+        <button class="preset-btn" id="btnAuditModal">
+          📋 Ver Log Control CSV &amp; SAP JSONL
+        </button>
+        <button class="preset-btn secondary" id="btnNewSession">
+          ＋ Nueva Sesión Limpia
+        </button>
+      </div>
+
+      <footer class="sidebar-footer">
+        Ing. Santiago Pineda Botero · Defensa Técnica Reto 03
+      </footer>
+    </aside>
+
+    <!-- Área Principal del Chat -->
+    <main class="chat-panel">
+      <header class="chat-topbar">
+        <div>
+          <span class="session-pill" id="sessionLabel">Sesión: cargando...</span>
+          <span class="policy-pill" id="policyLabel">Política HITL: PRD</span>
+        </div>
+        <div class="topbar-legend">
+          <span class="legend-item"><i class="dot ok"></i> Control OK</span>
+          <span class="legend-item"><i class="dot warn"></i> Confirmación Humana</span>
+          <span class="legend-item"><i class="dot err"></i> Bloqueo SAP</span>
+        </div>
+      </header>
+
+      <section class="messages-container" id="messagesContainer">
+        <div class="welcome-banner">
+          <h3>Bienvenido al Agente de Control y Creación de Órdenes de Compra SAP</h3>
+          <p>
+            Valido automáticamente paquetes documentales contra los maestros corporativos
+            (<strong>RC1–RC10</strong>: proveedores, matriz de aprobación y topes por centro de costo,
+            tolerancia de cotización ±2 %, IVA, condiciones de pago y detección de compras retroactivas),
+            genero evidencia <strong>PDF + SHA-256</strong> y registro la OC de forma idempotente en SAP simulado.
+          </p>
+        </div>
+      </section>
+
+      <!-- Indicador de Pensando -->
+      <div class="thinking-bar hidden" id="thinkingBar">
+        <div class="spinner"></div>
+        <span>El agente está evaluando controles internos y ejecutando herramientas SAP...</span>
+      </div>
+
+      <!-- Entrada de Mensajes -->
+      <form class="composer" id="chatForm">
+        <textarea
+          id="messageInput"
+          rows="2"
+          placeholder="Escribe tu instrucción (ej. 'Procesa la solicitud sol-001' o 'Procesa sol-005')..."
+          required
+        ></textarea>
+        <button type="submit" id="sendBtn" class="send-btn">Enviar ➤</button>
+      </form>
+    </main>
+  </div>
+
+  <!-- Modal de Auditoría SAP y Control Interno -->
+  <div class="modal-backdrop hidden" id="auditModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Registro de Control Interno (<code>out/control.csv</code>) y Órdenes SAP (<code>out/sap/ordenes.jsonl</code>)</h3>
+        <button id="btnCloseModal" class="close-btn">✕</button>
+      </div>
+      <div class="modal-body" id="auditContent">Cargando registros...</div>
+    </div>
+  </div>
+
+  <script src="/app.js" type="module"></script>
+</body>
+</html>
